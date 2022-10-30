@@ -1,4 +1,8 @@
-using GraphQL.API.Schema;
+using GraphQL.API.Data;
+using GraphQL.API.Schema.Mutations;
+using GraphQL.API.Schema.Queries;
+using GraphQL.API.Services.Comments;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,10 +13,16 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddGraphQLServer();
+builder.Services.AddDbContext<DatabaseContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("CommandConnectionString"));
+});
+builder.Services.AddScoped<CommentsRepository>();
 
 builder.Services
     .AddGraphQLServer()
-    .AddQueryType<Query>(); 
+    .AddQueryType<Query>()
+    .AddMutationType<Mutation>();
 
 var app = builder.Build();
 
