@@ -1,3 +1,4 @@
+using EntityFramework.BLL.Helpers;
 using EntityFramework.DAL.Data;
 using EntityFramework.DAL.Interfaces;
 using EntityFramework.DAL.Repositories;
@@ -19,6 +20,7 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
 
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddAutoMapper(typeof(MappingProfiles));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
