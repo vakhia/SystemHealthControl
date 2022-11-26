@@ -7,9 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace EntityFramework.API.Controllers;
 
-[ApiController]
-[Route("api/[controller]")]
-public class AppointmentController : ControllerBase
+public class AppointmentController : BaseApiController
 {
     private readonly IGenericRepository<Appointment> _appointmentsRepository;
     private readonly IGenericRepository<MedicalExamination> _examinationsRepository;
