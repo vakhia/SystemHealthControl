@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using EntityFramework.BLL.Dtos;
+using EntityFramework.BLL.Helpers;
 using EntityFramework.BLL.Specifications;
 using EntityFramework.DAL.Interfaces;
 using EntityFramework.DAL.Models;
@@ -22,13 +23,19 @@ public class AppointmentController : BaseApiController
     }
 
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyList<AppointmentResponse>>> GetAppointments(string sort)
+    public async Task<ActionResult<Pagination<AppointmentResponse>>> GetAppointments(
+        [FromQuery] AppointmentSpecParams appointmentParams)
     {
-        var specification = new AppointmentsWithExaminationsSpecifications(sort);
+        var specification = new AppointmentsWithExaminationsSpecifications(appointmentParams);
         var appointments = await _appointmentsRepository.ListAsync(specification);
+        var countSpecification = new AppointmentWithFiltersForCountSpecification(appointmentParams);
+        var totalItems = await _appointmentsRepository.CountAsync(countSpecification);
 
-        return Ok(_mapper
-            .Map<IReadOnlyList<Appointment>, IReadOnlyList<AppointmentResponse>>(appointments));
+        var data = _mapper
+            .Map<IReadOnlyList<Appointment>, IReadOnlyList<AppointmentResponse>>(appointments);
+
+        return Ok(new Pagination<AppointmentResponse>(appointmentParams.PageIndex, appointmentParams.PageSize,
+            totalItems, data));
     }
 
     [HttpGet("{id}")]

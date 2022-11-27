@@ -4,14 +4,17 @@ namespace EntityFramework.BLL.Specifications;
 
 public class AppointmentsWithExaminationsSpecifications : BaseSpecification<Appointment>
 {
-    public AppointmentsWithExaminationsSpecifications(string sort)
+    public AppointmentsWithExaminationsSpecifications(AppointmentSpecParams appointmentParams) : base(x
+        => (string.IsNullOrEmpty(appointmentParams.Search) || x.Title.ToLower().Contains(appointmentParams.Search)))
     {
         AddInclude(x => x.Examinations);
         AddOrderBy(x => x.Title);
+        ApplyPaging(appointmentParams.PageSize * (appointmentParams.PageIndex - 1),
+            appointmentParams.PageSize);
 
-        if (string.IsNullOrEmpty(sort)) return;
+        if (string.IsNullOrEmpty(appointmentParams.Sort)) return;
         {
-            switch (sort)
+            switch (appointmentParams.Sort)
             {
                 case "startDateAsc":
                     AddOrderBy(x => x.StartDate);
