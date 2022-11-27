@@ -22,9 +22,9 @@ public class AppointmentController : BaseApiController
     }
 
     [HttpGet]
-    public async Task<ActionResult<IReadOnlyList<AppointmentResponse>>> GetAppointments()
+    public async Task<ActionResult<IReadOnlyList<AppointmentResponse>>> GetAppointments(string sort)
     {
-        var specification = new AppointmentsWithExaminationsSpecifications();
+        var specification = new AppointmentsWithExaminationsSpecifications(sort);
         var appointments = await _appointmentsRepository.ListAsync(specification);
 
         return Ok(_mapper
