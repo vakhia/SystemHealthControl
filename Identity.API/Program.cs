@@ -1,4 +1,6 @@
 using System.Text;
+using Identity.BLL.Interfaces;
+using Identity.BLL.Services;
 using Identity.DAL.Data;
 using Identity.DAL.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -37,8 +39,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetValue<string>("Token:Key"))),
             ValidIssuer = builder.Configuration.GetValue<string>("Token:Issuer"),
             ValidateIssuer = true,
+            ValidateAudience = false,
         };
     });
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 var app = builder.Build();
 
