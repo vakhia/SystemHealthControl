@@ -54,6 +54,7 @@ public class AccountController : BaseApiController
     {
         var user = new User()
         {
+            UserName = userRegisterRequest.FirstName + userRegisterRequest.Email,
             FirstName = userRegisterRequest.FirstName,
             SecondName = userRegisterRequest.SecondName,
             Email = userRegisterRequest.Email,

@@ -1,0 +1,115 @@
+version: '3.4'
+
+networks:
+  backend:
+
+services:
+  azuresqledge:
+    container_name: sqledge
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=Password@12345#
+    networks:
+      - backend
+    ports:
+      - 8001:1433
+
+  identityapi:
+    container_name: identity
+    image: ${DOCKER_REGISTRY-}identity.api
+    build:
+      context: .
+      dockerfile: Identity.API/Dockerfile
+    environment:
+        - ASPNETCORE_ENVIRONMENT=Development
+        - "Identity:ConnectionString=Server=azuresqledge;Initial Catalog=IdentityDb;User ID=sa;Password=Password@12345#;TrustServerCertificate=False;Encrypt=false"
+    networks:
+      - backend
+    ports:
+      - 8002:80
+  
+  cleanapi:
+    container_name: clean
+    image: ${DOCKER_REGISTRY-}ca.api
+    build:
+      context: .
+      dockerfile: CA.API/Dockerfile
+    networks:
+      - backend
+    ports:
+      - 8006:80
+  
+  dapperapi:
+    container_name: dapper
+    image: ${DOCKER_REGISTRY-}dapper.api
+    build:
+      context: .
+      dockerfile: Dapper.API/Dockerfile
+    networks:
+      - backend
+    ports:
+      - 8007:80
+  
+  entityapi:
+    container_name: entity
+    image: ${DOCKER_REGISTRY-}entityframework.api
+    build:
+      context: .
+      dockerfile: EntityFramework.API/Dockerfile
+    networks:
+      - backend
+    ports:
+      - 8008:80
+  
+  graphqlapi:
+    container_name: graphql
+    image: ${DOCKER_REGISTRY-}graphql.api
+    build:
+      context: .
+      dockerfile: GraphQL.API/Dockerfile
+    networks:
+      - backend
+    ports:
+      - 8004:80
+  
+  basket:
+    container_name: basket
+    image: ${DOCKER_REGISTRY-}basket.api
+    build:
+      context: .
+      dockerfile: Basket.API/Dockerfile
+    networks:
+      - backend
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "BasketSettings:ConnectionString=redis"
+    ports:
+      - 8005:80
+    depends_on:
+      - redis
+    links:
+      - redis
+
+  redis:
+    container_name: redis
+    image: redis:latest
+    networks:
+      - backend
+    ports:
+      - "6379:6379"
+    command: [ "redis-server", "--appendonly", "yes" ]
+
+  redis-commander:
+    container_name: redis-commander
+    image: rediscommander/redis-commander:latest
+    networks:
+      - backend
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+      - HTTP_USER=root
+      - HTTP_PASSWORD=secret
+    ports:
+      - 8081:8081
+    depends_on:
+      - redis

@@ -41,7 +41,7 @@ builder.Services.AddCors(option =>
 
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("Connection"));
+    options.UseSqlServer(builder.Configuration.GetValue<string>("EntityFramework:ConnectionString"));
 });
 
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();

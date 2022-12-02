@@ -6,7 +6,7 @@ namespace Identity.DAL.Data;
 
 public class IdentityDatabaseContext : IdentityDbContext<User>
 {
-    public IdentityDatabaseContext(DbContextOptions<IdentityDbContext> options) : base(options)
+    public IdentityDatabaseContext(DbContextOptions<IdentityDatabaseContext> options) : base(options)
     {
     }
 

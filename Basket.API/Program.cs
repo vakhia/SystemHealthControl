@@ -12,10 +12,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<IConnectionMultiplexer>(x =>
 {
-    var configuration = ConfigurationOptions.Parse(builder.Configuration.GetConnectionString("Redis"), true);
+    var configuration = ConfigurationOptions.Parse(builder.Configuration.GetValue<string>("BasketSettings:ConnectionString"));
+    configuration.AbortOnConnectFail = false;
 
     return ConnectionMultiplexer.Connect(configuration);
 });
+
 builder.Services.AddScoped<IBasketRepository, BasketRepository>();
 
 var app = builder.Build();

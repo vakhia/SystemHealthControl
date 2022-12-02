@@ -5,7 +5,6 @@ using Identity.DAL.Data;
 using Identity.DAL.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 
@@ -17,12 +16,11 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
-builder.Services.AddDbContext<IdentityDbContext>(x =>
+builder.Services.AddDbContext<IdentityDatabaseContext>(x =>
 {
-    x.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    x.UseSqlServer(builder.Configuration.GetValue<string>("Identity:ConnectionString"));
 });
-builder.Services.AddIdentity<User, IdentityRole>(options =>
+builder.Services.AddIdentityCore<User>(options =>
     {
         options.User.RequireUniqueEmail = true;
         options.SignIn.RequireConfirmedEmail = true;

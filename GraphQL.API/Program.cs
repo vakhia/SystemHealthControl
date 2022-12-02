@@ -15,7 +15,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddGraphQLServer();
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("CommandConnectionString"));
+    options.UseSqlServer(builder.Configuration.GetValue<string>("GraphQL:ConnectionString"));
 });
 builder.Services.AddScoped<CommentsRepository>();
 
