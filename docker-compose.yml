@@ -38,7 +38,7 @@ services:
     networks:
       - backend
     ports:
-      - 8006:80
+      - 8003:80
   
   dapperapi:
     container_name: dapper
@@ -49,7 +49,7 @@ services:
     networks:
       - backend
     ports:
-      - 8007:80
+      - 8004:80
   
   entityapi:
     container_name: entity
@@ -60,7 +60,7 @@ services:
     networks:
       - backend
     ports:
-      - 8008:80
+      - 8005:80
   
   graphqlapi:
     container_name: graphql
@@ -71,7 +71,7 @@ services:
     networks:
       - backend
     ports:
-      - 8004:80
+      - 8006:80
   
   basket:
     container_name: basket
@@ -84,8 +84,6 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - "BasketSettings:ConnectionString=redis"
-    ports:
-      - 8005:80
     depends_on:
       - redis
     links:
@@ -113,3 +111,14 @@ services:
       - 8081:8081
     depends_on:
       - redis
+    
+  apigateway:
+    container_name: api_gateway
+    image: ${DOCKER_REGISTRY-}apigateway
+    build:
+      context: .
+      dockerfile: ApiGateway/Dockerfile
+    networks:
+      - backend
+    ports:
+      - 8009:80

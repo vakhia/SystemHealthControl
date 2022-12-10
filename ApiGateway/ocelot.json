@@ -1,0 +1,31 @@
+{
+   "Routes": [
+     {
+       "UpstreamPathTemplate": "/api/basket",
+       "UpstreamHttpMethod": ["POST"],
+       "DownstreamScheme": "http",
+       "DownstreamHostAndPorts": [
+         {
+           "Host": "basket",
+           "Port": 80
+         }
+       ],
+       "DownstreamPathTemplate": "/api/basket"
+     },
+     {
+       "UpstreamPathTemplate": "/api/basket/{id}",
+       "UpstreamHttpMethod": ["GET", "DELETE"],
+       "DownstreamScheme": "http",
+       "DownstreamHostAndPorts": [
+         {
+           "Host": "basket",
+           "Port": 80
+         }
+       ],
+       "DownstreamPathTemplate": "/api/basket/{id}"
+     }
+   ],
+    "GlobalConfiguration": {
+         "BaseUrl": "http://localhost:800"
+    }
+}

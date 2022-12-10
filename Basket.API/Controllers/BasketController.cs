@@ -15,7 +15,7 @@ public class BasketController : ControllerBase
         _basketRepository = basketRepository;
     }
 
-    [HttpGet]
+    [HttpGet("{id}")]
     public async Task<ActionResult<CustomerBasket>> GetBasketById(string id)
     {
         var basket = await _basketRepository.GetBasketAsync(id);
