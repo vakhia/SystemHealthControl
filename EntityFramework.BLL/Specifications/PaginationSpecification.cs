@@ -1,6 +1,6 @@
 namespace EntityFramework.BLL.Specifications;
 
-public class AppointmentSpecParams
+public class PaginationSpecificationParams
 {
     private const int MaxPageSize = 100;
     public int PageIndex { get; set; } = 1;
@@ -11,11 +11,11 @@ public class AppointmentSpecParams
         get => _pageSize;
         set => _pageSize = (value > MaxPageSize) ? MaxPageSize : value;
     }
-
+    
     public string Sort { get; set; }
-    private string _search;
+    private string? _search;
 
-    public string Search
+    public string? Search
     {
         get => _search;
         set => _search = value.ToLower();

@@ -1,49 +1,60 @@
-﻿using AutoMapper;
+﻿using EntityFramework.API.Errors;
 using EntityFramework.BLL.Dtos;
+using EntityFramework.BLL.Dtos.Requests;
 using EntityFramework.BLL.Helpers;
+using EntityFramework.BLL.Interfaces;
 using EntityFramework.BLL.Specifications;
-using EntityFramework.DAL.Interfaces;
-using EntityFramework.DAL.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EntityFramework.API.Controllers;
 
 public class AppointmentController : BaseApiController
 {
-    private readonly IGenericRepository<Appointment> _appointmentsRepository;
-    private readonly IGenericRepository<MedicalExamination> _examinationsRepository;
-    private readonly IMapper _mapper;
+    private readonly IAppointmentService _appointmentService;
 
-    public AppointmentController(IGenericRepository<Appointment> appointmentsRepository,
-        IGenericRepository<MedicalExamination> examinationsRepository, IMapper mapper)
+    public AppointmentController(IAppointmentService appointmentService)
     {
-        _appointmentsRepository = appointmentsRepository;
-        _examinationsRepository = examinationsRepository;
-        _mapper = mapper;
+        _appointmentService = appointmentService;
     }
 
     [HttpGet]
     public async Task<ActionResult<Pagination<AppointmentResponse>>> GetAppointments(
-        [FromQuery] AppointmentSpecParams appointmentParams)
+        [FromQuery] PaginationSpecificationParams specificationParams)
     {
-        var specification = new AppointmentsWithExaminationsSpecifications(appointmentParams);
-        var appointments = await _appointmentsRepository.ListAsync(specification);
-        var countSpecification = new AppointmentWithFiltersForCountSpecification(appointmentParams);
-        var totalItems = await _appointmentsRepository.CountAsync(countSpecification);
-
-        var data = _mapper
-            .Map<IReadOnlyList<Appointment>, IReadOnlyList<AppointmentResponse>>(appointments);
-
-        return Ok(new Pagination<AppointmentResponse>(appointmentParams.PageIndex, appointmentParams.PageSize,
-            totalItems, data));
+        return Ok(await _appointmentService.GetAppointmentsAsync(specificationParams));
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<AppointmentResponse>> GetAppointmentById(int id)
     {
-        var specification = new AppointmentsWithExaminationsSpecifications(id);
-        var appointment = await _appointmentsRepository.GetEntityWithSpec(specification);
+        var appointment = await _appointmentService.GetAppointmentByIdAsync(id);
 
-        return _mapper.Map<Appointment, AppointmentResponse>(appointment);
+        if (appointment == null)
+        {
+            return BadRequest(new ApiResponse(404));
+        }
+
+        return appointment;
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<CreateAppointmentRequest>> CreateAppointment(
+        CreateAppointmentRequest appointmentRequest)
+    {
+        return await _appointmentService.CreateAppointmentAsync(appointmentRequest);
+    }
+
+    [HttpPut]
+    public async Task<ActionResult<UpdateAppointmentRequest>> UpdateAppointment(
+        UpdateAppointmentRequest appointmentRequest)
+    {
+        return await _appointmentService.UpdateAppointmentAsync(appointmentRequest);
+    }
+
+    [HttpDelete]
+    public async Task<ActionResult<DeleteAppointmentRequest>> DeleteAppointment(
+        DeleteAppointmentRequest appointmentRequest)
+    {
+        return await _appointmentService.DeleteAppointmentAsync(appointmentRequest);
     }
 }

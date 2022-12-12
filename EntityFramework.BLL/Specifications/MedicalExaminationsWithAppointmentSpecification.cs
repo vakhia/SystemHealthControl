@@ -1,13 +1,13 @@
-﻿using EntityFramework.DAL.Models;
+using EntityFramework.DAL.Models;
 
 namespace EntityFramework.BLL.Specifications;
 
-public class AppointmentsWithExaminationsSpecifications : BaseSpecification<Appointment>
+public class MedicalExaminationsWithAppointmentSpecification : BaseSpecification<MedicalExamination>
 {
-    public AppointmentsWithExaminationsSpecifications(PaginationSpecificationParams specificationParams) : base(x
+    public MedicalExaminationsWithAppointmentSpecification(PaginationSpecificationParams specificationParams) : base(x
         => (string.IsNullOrEmpty(specificationParams.Search) || x.Title.ToLower().Contains(specificationParams.Search)))
     {
-        AddInclude(x => x.Examinations);
+        AddInclude(m => m.Appointments);
         AddOrderBy(x => x.Title);
         ApplyPaging(specificationParams.PageSize * (specificationParams.PageIndex - 1),
             specificationParams.PageSize);
@@ -16,11 +16,11 @@ public class AppointmentsWithExaminationsSpecifications : BaseSpecification<Appo
         {
             switch (specificationParams.Sort)
             {
-                case "startDateAsc":
-                    AddOrderBy(x => x.StartDate);
+                case "titleAsc":
+                    AddOrderBy(x => x.Title);
                     break;
-                case "startDateDesc":
-                    AddOrderByDescending(x => x.StartDate);
+                case "titleDesc":
+                    AddOrderByDescending(x => x.Title);
                     break;
                 default:
                     AddOrderBy(x => x.Title);
@@ -29,8 +29,9 @@ public class AppointmentsWithExaminationsSpecifications : BaseSpecification<Appo
         }
     }
 
-    public AppointmentsWithExaminationsSpecifications(int id) : base(x => x.Id == id)
+    public MedicalExaminationsWithAppointmentSpecification(int id) :
+        base(me => me.Id == id)
     {
-        AddInclude(x => x.Examinations);
+        AddInclude(m => m.Appointments);
     }
 }

@@ -1,14 +1,15 @@
-﻿using EntityFramework.DAL.Models;
+using System.Linq.Expressions;
+using EntityFramework.DAL.Models;
 
 namespace EntityFramework.BLL.Specifications;
 
-public class AppointmentsWithExaminationsSpecifications : BaseSpecification<Appointment>
+public class TreatmentsWithMedicalExaminationsSpecification : BaseSpecification<Treatment>
 {
-    public AppointmentsWithExaminationsSpecifications(PaginationSpecificationParams specificationParams) : base(x
+    public TreatmentsWithMedicalExaminationsSpecification(PaginationSpecificationParams specificationParams) : base(x
         => (string.IsNullOrEmpty(specificationParams.Search) || x.Title.ToLower().Contains(specificationParams.Search)))
     {
-        AddInclude(x => x.Examinations);
-        AddOrderBy(x => x.Title);
+        AddInclude(m => m.MedicalExaminations);
+        AddOrderBy(x => x.StartDate);
         ApplyPaging(specificationParams.PageSize * (specificationParams.PageIndex - 1),
             specificationParams.PageSize);
 
@@ -23,14 +24,14 @@ public class AppointmentsWithExaminationsSpecifications : BaseSpecification<Appo
                     AddOrderByDescending(x => x.StartDate);
                     break;
                 default:
-                    AddOrderBy(x => x.Title);
+                    AddOrderBy(x => x.StartDate);
                     break;
             }
         }
     }
 
-    public AppointmentsWithExaminationsSpecifications(int id) : base(x => x.Id == id)
+    public TreatmentsWithMedicalExaminationsSpecification(int id) : base(x => x.Id == id)
     {
-        AddInclude(x => x.Examinations);
+        AddInclude(x => x.MedicalExaminations);
     }
 }

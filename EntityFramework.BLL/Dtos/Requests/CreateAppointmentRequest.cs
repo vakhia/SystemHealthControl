@@ -1,6 +1,6 @@
-﻿namespace EntityFramework.DAL.Models;
+namespace EntityFramework.BLL.Dtos.Requests;
 
-public class Appointment : BaseModel
+public class CreateAppointmentRequest
 {
     public int DoctorId { get; set; }
 
@@ -11,10 +11,8 @@ public class Appointment : BaseModel
     public string Description { get; set; }
 
     public string? ExtraInformation { get; set; }
-    
+
     public DateTime StartDate { get; set; }
 
     public DateTime? EndDate { get; set; }
-
-    public ICollection<MedicalExamination> Examinations { get; set; }
 }

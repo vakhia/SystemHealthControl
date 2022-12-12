@@ -1,6 +1,8 @@
 using EntityFramework.API.Errors;
 using EntityFramework.API.Middleware;
 using EntityFramework.BLL.Helpers;
+using EntityFramework.BLL.Interfaces;
+using EntityFramework.BLL.Services;
 using EntityFramework.DAL.Data;
 using EntityFramework.DAL.Interfaces;
 using EntityFramework.DAL.Repositories;
@@ -44,7 +46,11 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseSqlServer(builder.Configuration.GetValue<string>("EntityFramework:ConnectionString"));
 });
 
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAppointmentRepository, AppointmentRepository>();
+builder.Services.AddScoped<IAppointmentService, AppointmentService>();
+builder.Services.AddScoped<IMedicalExaminationService, MedicalExaminationService>();
+builder.Services.AddScoped<ITreatmentService, TreatmentService>();
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddAutoMapper(typeof(MappingProfiles));
 var app = builder.Build();
