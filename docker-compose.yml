@@ -57,6 +57,9 @@ services:
     build:
       context: .
       dockerfile: EntityFramework.API/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "EntityFramework:ConnectionString=Server=azuresqledge;Initial Catalog=EntityFrameworkDb;User ID=sa;Password=Password@12345#;TrustServerCertificate=False;Encrypt=false"
     networks:
       - backend
     ports:
@@ -111,6 +114,14 @@ services:
       - 8081:8081
     depends_on:
       - redis
+  
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:latest
+    networks:
+      - backend
+    ports:
+      - 8007:5672
     
   apigateway:
     container_name: api_gateway
