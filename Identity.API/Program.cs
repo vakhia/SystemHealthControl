@@ -26,6 +26,7 @@ builder.Services.AddIdentityCore<User>(options =>
         options.SignIn.RequireConfirmedEmail = true;
     })
     .AddEntityFrameworkStores<IdentityDatabaseContext>()
+    .AddDefaultTokenProviders()
     .AddSignInManager<SignInManager<User>>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -41,6 +42,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IMailService, MailService>();
+builder.Services.AddScoped<IAccountService, AccountService>();
 
 var app = builder.Build();
 

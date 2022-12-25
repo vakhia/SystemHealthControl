@@ -14,4 +14,8 @@
       <ProjectReference Include="..\Identity.DAL\Identity.DAL.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="RestSharp" Version="108.0.3" />
+    </ItemGroup>
+
 </Project>
