@@ -1,3 +1,4 @@
+using System.Reflection;
 using EntityFramework.API.Errors;
 using EntityFramework.API.Middleware;
 using EntityFramework.BLL.Helpers;
@@ -8,11 +9,15 @@ using EntityFramework.DAL.Interfaces;
 using EntityFramework.DAL.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
+using Serilog.Sinks.Elasticsearch;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+ConfigureLogger();
+builder.Host.UseSerilog();
 builder.Services.AddControllers();
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
@@ -74,3 +79,33 @@ app.UseCors("CorsPolicy");
 app.MapControllers();
 
 app.Run();
+
+#region helper
+void ConfigureLogger()
+{
+    var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+    var configuration = new ConfigurationBuilder()
+        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+        .Build();
+
+    Log.Logger = new LoggerConfiguration()
+        .Enrich.FromLogContext()
+        .WriteTo.Debug()
+        .WriteTo.Console()
+        .WriteTo.Elasticsearch(ConfigureElasticsearchSinkOptions(configuration, env))
+        .CreateLogger();
+}
+
+ElasticsearchSinkOptions ConfigureElasticsearchSinkOptions(IConfiguration configuration, string env)
+{
+    return new ElasticsearchSinkOptions(new Uri(configuration["ElasticConfiguration:Uri"]))
+    {
+        AutoRegisterTemplate = true,
+        IndexFormat = $"{Assembly.GetExecutingAssembly().GetName().Name.ToLower()}-{env.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}"
+        
+    };
+}
+
+
+#endregion

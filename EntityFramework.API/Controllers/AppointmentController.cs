@@ -11,10 +11,12 @@ namespace EntityFramework.API.Controllers;
 public class AppointmentController : BaseApiController
 {
     private readonly IAppointmentService _appointmentService;
+    private readonly ILogger<AppointmentController> _logger;
 
-    public AppointmentController(IAppointmentService appointmentService)
+    public AppointmentController(IAppointmentService appointmentService, ILogger<AppointmentController> logger)
     {
         _appointmentService = appointmentService;
+        _logger = logger;
     }
 
     [HttpGet]

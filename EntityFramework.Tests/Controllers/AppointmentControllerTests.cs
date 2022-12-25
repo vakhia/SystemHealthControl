@@ -7,18 +7,21 @@ using EntityFramework.BLL.Specifications;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace EntityFramework.Tests.Controllers;
 
 public class AppointmentControllerTests
 {
     private readonly IAppointmentService _appointmentService;
+    private readonly ILogger<AppointmentController> _logger;
     private readonly AppointmentController _appointmentController;
 
     public AppointmentControllerTests()
-    { _appointmentService = A.Fake<IAppointmentService>();
-       
-        _appointmentController = new AppointmentController(_appointmentService);
+    {
+        _appointmentService = A.Fake<IAppointmentService>();
+        _logger = A.Fake<ILogger<AppointmentController>>();
+        _appointmentController = new AppointmentController(_appointmentService, _logger);
     }
 
     [Fact]
@@ -65,10 +68,10 @@ public class AppointmentControllerTests
         var createAppointmentRequest = A.Fake<CreateAppointmentRequest>();
         A.CallTo(() => _appointmentService.CreateAppointmentAsync(createAppointmentRequest))
             .Returns(createAppointmentRequest);
-        
+
         //Act
         var result = _appointmentController.CreateAppointment(createAppointmentRequest);
-        
+
         //Assert
         result.Should().NotBeNull();
         result.Should().BeOfType(typeof(Task<ActionResult<CreateAppointmentRequest>>));
@@ -81,10 +84,10 @@ public class AppointmentControllerTests
         var updateAppointmentRequest = A.Fake<UpdateAppointmentRequest>();
         A.CallTo(() => _appointmentService.UpdateAppointmentAsync(updateAppointmentRequest))
             .Returns(updateAppointmentRequest);
-        
+
         //Act
         var result = _appointmentController.UpdateAppointment(updateAppointmentRequest);
-        
+
         //Assert
         result.Should().NotBeNull();
         result.Should().BeOfType(typeof(Task<ActionResult<UpdateAppointmentRequest>>));
@@ -97,7 +100,7 @@ public class AppointmentControllerTests
         var deleteAppointmentRequest = A.Fake<DeleteAppointmentRequest>();
         A.CallTo(() => _appointmentService.DeleteAppointmentAsync(deleteAppointmentRequest))
             .Returns(deleteAppointmentRequest);
-        
+
         //Act
         var result = _appointmentController.DeleteAppointment(deleteAppointmentRequest);
 
@@ -105,5 +108,4 @@ public class AppointmentControllerTests
         result.Should().NotBeNull();
         result.Should().BeOfType(typeof(Task<ActionResult<DeleteAppointmentRequest>>));
     }
-
 }
