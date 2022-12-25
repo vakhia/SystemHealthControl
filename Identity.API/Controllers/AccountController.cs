@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using System.Text.Encodings.Web;
 using Identity.BLL.Dtos.Requests;
 using Identity.BLL.Dtos.Responses;
 using Identity.BLL.Interfaces;
@@ -12,9 +13,13 @@ namespace Identity.API.Controllers;
 public class AccountController : BaseApiController
 {
     private readonly UserManager<User> _userManager;
+
     private readonly SignInManager<User> _signInManager;
+
     private readonly ITokenService _tokenService;
+
     private readonly IMailService _mailService;
+
     private readonly IAccountService _accountService;
 
     public AccountController(UserManager<User> userManager, SignInManager<User> signInManager,
@@ -44,12 +49,16 @@ public class AccountController : BaseApiController
             return Unauthorized(401);
         }
 
+        var accessToken = _tokenService.CreateToken(user);
+        var refreshToken = await _tokenService.CreateRefreshToken(user.Id);
+
         return new UserResponse()
         {
             FirstName = user.FirstName,
             SecondName = user.SecondName,
             Email = user.Email,
-            Token = _tokenService.CreateToken(user),
+            Token = accessToken,
+            RefreshToken = refreshToken.Token,
         };
     }
 
@@ -76,7 +85,7 @@ public class AccountController : BaseApiController
         var emailBody = $"Please confirm your email address <a href=\"#URL#\">Click me</a>";
         var callbackUrl = Request.Scheme + "://" + Request.Host +
                           Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = emailToken });
-        var body = emailBody.Replace("#URL#", System.Text.Encodings.Web.HtmlEncoder.Default.Encode(callbackUrl));
+        var body = emailBody.Replace("#URL#", HtmlEncoder.Default.Encode(callbackUrl));
         var responseFromSendingMail = _mailService.SendEmail(body, user.Email);
 
         if (!responseFromSendingMail)
@@ -87,6 +96,23 @@ public class AccountController : BaseApiController
         return Ok("Please, verify your email to log in!");
     }
 
+    [HttpPost("RefreshToken")]
+    public async Task<ActionResult<UserResponse>> RefreshToken([FromBody] RefreshTokenRequest tokenRequest)
+    {
+        var accessToken = await _tokenService.VerifyAndGenerateToken(tokenRequest);
+        var refreshToken = await _tokenService.CreateRefreshToken(tokenRequest.UserId);
+        var user = await _userManager.FindByIdAsync(tokenRequest.UserId);
+
+        return new UserResponse()
+        {
+            FirstName = user.FirstName,
+            SecondName = user.SecondName,
+            Email = user.Email,
+            Token = accessToken,
+            RefreshToken = refreshToken.Token,
+        };
+    }
+
     [HttpGet("ConfirmEmail")]
     public async Task<ActionResult> ConfirmEmail(string userId, string code)
     {
@@ -94,7 +120,7 @@ public class AccountController : BaseApiController
         {
             return BadRequest(400);
         }
-        
+
         return Ok(await _accountService.ConfirmEmail(userId, code));
     }
 

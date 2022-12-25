@@ -6,6 +6,7 @@ namespace Identity.DAL.Data;
 
 public class IdentityDatabaseContext : IdentityDbContext<User>
 {
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
     public IdentityDatabaseContext(DbContextOptions<IdentityDatabaseContext> options) : base(options)
     {
     }

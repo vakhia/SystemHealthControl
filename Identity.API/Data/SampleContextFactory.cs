@@ -8,13 +8,13 @@ public class SampleContextFactory : IDesignTimeDbContextFactory<IdentityDatabase
 {
     public IdentityDatabaseContext CreateDbContext(string[] args)
     {
-        IConfigurationRoot confuration = new ConfigurationBuilder()
+        IConfigurationRoot configuration = new ConfigurationBuilder()
             .SetBasePath(Directory.GetCurrentDirectory())
             .AddJsonFile("appsettings.Development.json")
             .Build();
         var build = WebApplication.CreateBuilder(args);
         var builder = new DbContextOptionsBuilder<IdentityDatabaseContext>();
-        var connectionString = confuration.GetValue<string>("Identity:ConnectionString");
+        var connectionString = configuration.GetValue<string>("Identity:ConnectionString");
         builder.UseSqlServer(connectionString, x => x.MigrationsAssembly("Identity.API"));
         return new IdentityDatabaseContext(builder.Options);
     }
