@@ -138,4 +138,10 @@ public class AccountController : BaseApiController
     {
         return await _accountService.CheckEmailExistsAsync(email);
     }
+
+    [HttpPost("SyncUser/{userId}")]
+    public async Task<ActionResult<bool>> SyncUserById(string userId)
+    {
+        return await _accountService.SyncUserById(userId);
+    }
 }

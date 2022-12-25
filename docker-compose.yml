@@ -117,11 +117,12 @@ services:
   
   rabbitmq:
     container_name: rabbitmq
-    image: rabbitmq:latest
+    image: rabbitmq:3-management
     networks:
       - backend
     ports:
       - 8007:5672
+      - 15672:15672
     
   apigateway:
     container_name: api_gateway

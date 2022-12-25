@@ -1,12 +1,14 @@
 using System.Reflection;
 using EntityFramework.API.Errors;
 using EntityFramework.API.Middleware;
+using EntityFramework.BLL.Consumers;
 using EntityFramework.BLL.Helpers;
 using EntityFramework.BLL.Interfaces;
 using EntityFramework.BLL.Services;
 using EntityFramework.DAL.Data;
 using EntityFramework.DAL.Interfaces;
 using EntityFramework.DAL.Repositories;
+using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -49,6 +51,22 @@ builder.Services.AddCors(option =>
 builder.Services.AddDbContext<DatabaseContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetValue<string>("EntityFramework:ConnectionString"));
+});
+
+builder.Services.AddMassTransit(x =>
+{
+    x.AddConsumer<UserRequestConsumer>();
+ 
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host("rabbitmq://localhost:8007");
+ 
+        cfg.ReceiveEndpoint("user-request-queue", ep =>
+        {
+            ep.PrefetchCount = 20;
+            ep.ConfigureConsumer<UserRequestConsumer>(context);
+        });
+    });
 });
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();

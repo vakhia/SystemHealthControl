@@ -1,8 +1,10 @@
 using System.Text;
+using Identity.BLL.Dtos.Requests;
 using Identity.BLL.Interfaces;
 using Identity.BLL.Services;
 using Identity.DAL.Data;
 using Identity.DAL.Models;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -44,6 +46,20 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IMailService, MailService>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+
+builder.Services.AddMassTransit(x =>
+{
+
+    x.AddBus(provider => Bus.Factory.CreateUsingRabbitMq(config =>
+    {
+        config.Host(new Uri("rabbitmq://localhost:8007"), h =>
+        {
+            h.Username("guest");
+            h.Password("guest");
+        });
+        config.Message<UserRequestQueue>(x=>{ });
+    }));
+});
 
 var app = builder.Build();
 
