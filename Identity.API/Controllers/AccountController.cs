@@ -54,6 +54,7 @@ public class AccountController : BaseApiController
 
         return new UserResponse()
         {
+            Id = user.Id,
             FirstName = user.FirstName,
             SecondName = user.SecondName,
             Email = user.Email,

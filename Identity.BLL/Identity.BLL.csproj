@@ -12,6 +12,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Identity.DAL\Identity.DAL.csproj" />
+      <ProjectReference Include="..\Shared.Models\Shared.Models.csproj" />
     </ItemGroup>
 
     <ItemGroup>

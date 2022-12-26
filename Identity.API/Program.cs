@@ -1,5 +1,4 @@
 using System.Text;
-using Identity.BLL.Dtos.Requests;
 using Identity.BLL.Interfaces;
 using Identity.BLL.Services;
 using Identity.DAL.Data;
@@ -9,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Shared.Models.Queues;
 
 var builder = WebApplication.CreateBuilder(args);
 

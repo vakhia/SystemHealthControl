@@ -3,6 +3,7 @@ using EntityFramework.BLL.Dtos;
 using EntityFramework.BLL.Dtos.Requests;
 using EntityFramework.BLL.Dtos.Responses;
 using EntityFramework.DAL.Models;
+using Shared.Models.Queues;
 
 namespace EntityFramework.BLL.Helpers;
 
@@ -41,5 +42,8 @@ public class MappingProfiles : Profile
 
         CreateMap<Treatment, DeleteTreatmentRequest>();
         CreateMap<DeleteTreatmentRequest, Treatment>();
+        
+        CreateMap<UserRequestQueue, User>();
+        CreateMap<User, UserRequestQueue>();
     }
 }

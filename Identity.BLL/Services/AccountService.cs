@@ -1,10 +1,10 @@
 using System.Text;
-using Identity.BLL.Dtos.Requests;
 using Identity.BLL.Dtos.Responses;
 using Identity.BLL.Interfaces;
 using Identity.DAL.Models;
 using MassTransit;
 using Microsoft.AspNetCore.Identity;
+using Shared.Models.Queues;
 
 namespace Identity.BLL.Services;
 
@@ -40,7 +40,7 @@ public class AccountService : IAccountService
         {
             await _bus.Publish(new UserRequestQueue()
             {
-                Id = user.Id,
+                IdentityId = user.Id,
                 FirstName = user.FirstName,
                 SecondName = user.SecondName,
             });
@@ -59,6 +59,7 @@ public class AccountService : IAccountService
 
         return new UserResponse()
         {
+            Id = user.Id,
             FirstName = user.FirstName,
             SecondName = user.SecondName,
             Email = user.Email,
@@ -78,7 +79,7 @@ public class AccountService : IAccountService
         var user = await _userManager.FindByIdAsync(userId);
         await _bus.Publish(new UserRequestQueue()
         {
-            Id = user.Id,
+            IdentityId = user.Id,
             FirstName = user.FirstName,
             SecondName = user.SecondName,
         });

@@ -1,8 +1,8 @@
-﻿namespace Identity.BLL.Dtos.Requests;
+namespace Shared.Models.Queues;
 
 public class UserRequestQueue
 {
-    public string Id { get; set; }
+    public string IdentityId { get; set; }
 
     public string FirstName { get; set; }
 

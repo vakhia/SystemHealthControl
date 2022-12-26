@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\EntityFramework.DAL\EntityFramework.DAL.csproj" />
+      <ProjectReference Include="..\Shared.Models\Shared.Models.csproj" />
     </ItemGroup>
 
     <ItemGroup>
