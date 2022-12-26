@@ -23,6 +23,150 @@
          }
        ],
        "DownstreamPathTemplate": "/api/basket/{id}"
+     },
+     {
+       "UpstreamPathTemplate": "/api/appointment",
+       "UpstreamHttpMethod": ["POST", "DELETE", "PUT"],
+       "DownstreamScheme": "http",
+       "DownstreamHostAndPorts": [
+         {
+           "Host": "entity",
+           "Port": 80
+         }
+       ],
+       "DownstreamPathTemplate": "/api/appointment"
+     },
+     {
+       "UpstreamPathTemplate": "/api/appointment/{id}",
+       "UpstreamHttpMethod": ["GET"],
+       "DownstreamScheme": "http",
+       "DownstreamHostAndPorts": [
+         {
+           "Host": "entity",
+           "Port": 80
+         }
+       ],
+       "DownstreamPathTemplate": "/api/appointment"
+     },
+     {
+       "UpstreamPathTemplate": "/api/medicalexamination",
+       "UpstreamHttpMethod": ["POST", "DELETE", "PUT"],
+       "DownstreamScheme": "http",
+       "DownstreamHostAndPorts": [
+         {
+           "Host": "entity",
+           "Port": 80
+         }
+       ],
+       "DownstreamPathTemplate": "/api/medicalexamination"
+     },
+     {
+       "UpstreamPathTemplate": "/api/medicalexamination/{id}",
+       "UpstreamHttpMethod": ["GET"],
+       "DownstreamScheme": "http",
+       "DownstreamHostAndPorts": [
+         {
+           "Host": "entity",
+           "Port": 80
+         }
+       ],
+       "DownstreamPathTemplate": "/api/medicalexamination"
+     },
+     {
+       "UpstreamPathTemplate": "/api/treatment",
+       "UpstreamHttpMethod": ["POST", "DELETE", "PUT"],
+       "DownstreamScheme": "http",
+       "DownstreamHostAndPorts": [
+         {
+           "Host": "entity",
+           "Port": 80
+         }
+       ],
+       "DownstreamPathTemplate": "/api/treatment"
+     },
+     {
+       "UpstreamPathTemplate": "/api/treatment/{id}",
+       "UpstreamHttpMethod": ["GET"],
+       "DownstreamScheme": "http",
+       "DownstreamHostAndPorts": [
+         {
+           "Host": "entity",
+           "Port": 80
+         }
+       ],
+       "DownstreamPathTemplate": "/api/treatment"
+     },
+     {
+       "UpstreamPathTemplate": "/api/account/login",
+       "UpstreamHttpMethod": ["POST"],
+       "DownstreamScheme": "http",
+       "DownstreamHostAndPorts": [
+         {
+           "Host": "identity",
+           "Port": 80
+         }
+       ],
+       "DownstreamPathTemplate": "/api/account/login"
+     },
+     {
+       "UpstreamPathTemplate": "/api/account/register",
+       "UpstreamHttpMethod": ["POST"],
+       "DownstreamScheme": "http",
+       "DownstreamHostAndPorts": [
+         {
+           "Host": "identity",
+           "Port": 80
+         }
+       ],
+       "DownstreamPathTemplate": "/api/account/register"
+     },
+     {
+       "UpstreamPathTemplate": "/api/account/refreshtoken",
+       "UpstreamHttpMethod": ["POST"],
+       "DownstreamScheme": "http",
+       "DownstreamHostAndPorts": [
+         {
+           "Host": "identity",
+           "Port": 80
+         }
+       ],
+       "DownstreamPathTemplate": "/api/account/refreshtoken"
+     },
+     {
+       "UpstreamPathTemplate": "/api/account",
+       "UpstreamHttpMethod": ["GET"],
+       "DownstreamScheme": "http",
+       "DownstreamHostAndPorts": [
+         {
+           "Host": "identity",
+           "Port": 80
+         }
+       ],
+       "DownstreamPathTemplate": "/api/account"
+     },
+     {
+       "UpstreamPathTemplate": "/api/account/syncuser/{id}",
+       "UpstreamHttpMethod": ["POST"],
+       "DownstreamScheme": "http",
+       "DownstreamHostAndPorts": [
+         {
+           "Host": "identity",
+           "Port": 80
+         }
+       ],
+       "DownstreamPathTemplate": "/api/account/syncuser/{id}"
+     },
+     {
+       "UpstreamPathTemplate": "/api/account/validatedata",
+       "UpstreamHttpMethod": ["POST"],
+       "DownstreamScheme": "http",
+       "DownstreamHostAndPorts": [
+         {
+           "Host": "identity",
+           "Port": 80
+         }
+       ],
+       "DownstreamPathTemplate": "/api/account/validatedata"
      }
    ],
     "GlobalConfiguration": {
