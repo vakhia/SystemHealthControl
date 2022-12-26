@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using System.Text.Encodings.Web;
+using GrpcService.Protos;
 using Identity.BLL.Dtos.Requests;
 using Identity.BLL.Dtos.Responses;
 using Identity.BLL.Interfaces;
@@ -22,14 +23,18 @@ public class AccountController : BaseApiController
 
     private readonly IAccountService _accountService;
 
+    private readonly IDataValidatorService _dataValidatorService;
+
     public AccountController(UserManager<User> userManager, SignInManager<User> signInManager,
-        ITokenService tokenService, IMailService mailService, IAccountService accountService)
+        ITokenService tokenService, IMailService mailService, IAccountService accountService,
+        IDataValidatorService dataValidatorService)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _tokenService = tokenService;
         _mailService = mailService;
         _accountService = accountService;
+        _dataValidatorService = dataValidatorService;
     }
 
     [HttpPost("login")]
@@ -144,5 +149,11 @@ public class AccountController : BaseApiController
     public async Task<ActionResult<bool>> SyncUserById(string userId)
     {
         return await _accountService.SyncUserById(userId);
+    }
+
+    [HttpPost("ValidateData")]
+    public async Task<ActionResult<UserDataResponse>> ValidateData([FromBody] UserDataRequest userDataRequest)
+    {
+        return await _dataValidatorService.ValidateData(userDataRequest);
     }
 }

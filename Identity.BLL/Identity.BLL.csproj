@@ -11,6 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\GrpcService\GrpcService.csproj" />
       <ProjectReference Include="..\Identity.DAL\Identity.DAL.csproj" />
       <ProjectReference Include="..\Shared.Models\Shared.Models.csproj" />
     </ItemGroup>

@@ -1,4 +1,5 @@
 using System.Text;
+using GrpcService.Protos;
 using Identity.BLL.Interfaces;
 using Identity.BLL.Services;
 using Identity.DAL.Data;
@@ -43,6 +44,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = false,
         };
     });
+builder.Services.AddGrpcClient<DataValidator.DataValidatorClient>
+    (g => { g.Address = new Uri("http://localhost:5017"); });
+builder.Services.AddScoped<IDataValidatorService, DataValidatorService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IMailService, MailService>();
 builder.Services.AddScoped<IAccountService, AccountService>();

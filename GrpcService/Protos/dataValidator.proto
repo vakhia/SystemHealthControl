@@ -1,0 +1,22 @@
+﻿syntax = "proto3";
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "GrpcService.Protos";
+
+// The greeting service definition.
+service DataValidator {
+  // Sends a greeting
+  rpc ValidatePersonalData (UserDataRequest) returns (UserDataResponse);
+}
+
+// The request message containing the user's name.
+message UserDataRequest {
+  string creditCard = 1;
+  string passportNumber = 2;
+}
+
+// The response message containing the greetings.
+message UserDataResponse {
+  bool creditCard = 1;
+  bool passportNumber = 3;
+}
