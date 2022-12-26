@@ -8,6 +8,7 @@ using EntityFramework.BLL.Specifications;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace EntityFramework.Tests.Controllers;
 
@@ -15,13 +16,15 @@ public class MedicalExaminationControllerTests
 {
     private readonly IMedicalExaminationService _medicalExaminationService;
     private readonly MedicalExaminationController _medicalExaminationController;
+    private readonly ILogger<MedicalExaminationController> _logger;
 
     public MedicalExaminationControllerTests()
     {
         _medicalExaminationService = A.Fake<IMedicalExaminationService>();
-        _medicalExaminationController = new MedicalExaminationController(_medicalExaminationService);
+        _logger = A.Fake<ILogger<MedicalExaminationController>>();
+        _medicalExaminationController = new MedicalExaminationController(_medicalExaminationService, _logger);
     }
-    
+
     [Fact]
     public void MedicalExaminationController_GetAppointments_ReturnsPaginationAppointmentResponse()
     {
@@ -49,7 +52,7 @@ public class MedicalExaminationControllerTests
     public void MedicalExaminationController_GetMedicalExaminationById_ReturnsMedicalExaminationResponse(int id)
     {
         //Arrange
-        var  medicalExamination = A.Fake<MedicalExaminationResponse>();
+        var medicalExamination = A.Fake<MedicalExaminationResponse>();
         A.CallTo(() => _medicalExaminationService.GetMedicalExaminationByIdAsync(id)).Returns(medicalExamination);
 
         //Act
@@ -67,10 +70,10 @@ public class MedicalExaminationControllerTests
         var createMedicalExaminationRequest = A.Fake<CreateMedicalExaminationRequest>();
         A.CallTo(() => _medicalExaminationService.CreateMedicalExaminationAsync(createMedicalExaminationRequest))
             .Returns(createMedicalExaminationRequest);
-        
+
         //Act
         var result = _medicalExaminationController.CreateMedicalExamination(createMedicalExaminationRequest);
-        
+
         //Assert
         result.Should().NotBeNull();
         result.Should().BeOfType(typeof(Task<ActionResult<CreateMedicalExaminationRequest>>));
@@ -83,10 +86,10 @@ public class MedicalExaminationControllerTests
         var updateMedicalExaminationRequest = A.Fake<UpdateMedicalExaminationRequest>();
         A.CallTo(() => _medicalExaminationService.UpdateMedicalExaminationAsync(updateMedicalExaminationRequest))
             .Returns(updateMedicalExaminationRequest);
-        
+
         //Act
         var result = _medicalExaminationController.UpdateMedicalExamination(updateMedicalExaminationRequest);
-        
+
         //Assert
         result.Should().NotBeNull();
         result.Should().BeOfType(typeof(Task<ActionResult<UpdateMedicalExaminationRequest>>));
@@ -99,7 +102,7 @@ public class MedicalExaminationControllerTests
         var deleteMedicalExaminationRequest = A.Fake<DeleteMedicalExaminationRequest>();
         A.CallTo(() => _medicalExaminationService.DeleteMedicalExaminationAsync(deleteMedicalExaminationRequest))
             .Returns(deleteMedicalExaminationRequest);
-        
+
         //Act
         var result = _medicalExaminationController.DeleteMedicalExamination(deleteMedicalExaminationRequest);
 
