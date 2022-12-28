@@ -4,6 +4,7 @@ using EntityFramework.BLL.Dtos.Requests;
 using EntityFramework.BLL.Helpers;
 using EntityFramework.BLL.Interfaces;
 using EntityFramework.BLL.Specifications;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EntityFramework.API.Controllers;
@@ -19,6 +20,7 @@ public class AppointmentController : BaseApiController
         _logger = logger;
     }
 
+    [Authorize]
     [HttpGet]
     public async Task<ActionResult<Pagination<AppointmentResponse>>> GetAppointments(
         [FromQuery] PaginationSpecificationParams specificationParams)
@@ -33,7 +35,8 @@ public class AppointmentController : BaseApiController
             return BadRequest(new ApiResponse(500));
         }
     }
-
+    
+    [Authorize]
     [HttpGet("{id}")]
     public async Task<ActionResult<AppointmentResponse>> GetAppointmentById(int id)
     {
@@ -55,6 +58,7 @@ public class AppointmentController : BaseApiController
         }
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<ActionResult<CreateAppointmentRequest>> CreateAppointment(
         CreateAppointmentRequest appointmentRequest)
@@ -70,6 +74,7 @@ public class AppointmentController : BaseApiController
         }
     }
 
+    [Authorize]
     [HttpPut]
     public async Task<ActionResult<UpdateAppointmentRequest>> UpdateAppointment(
         UpdateAppointmentRequest appointmentRequest)
@@ -85,6 +90,7 @@ public class AppointmentController : BaseApiController
         }
     }
 
+    [Authorize]
     [HttpDelete]
     public async Task<ActionResult<DeleteAppointmentRequest>> DeleteAppointment(
         DeleteAppointmentRequest appointmentRequest)

@@ -8,9 +8,11 @@ using EntityFramework.BLL.Services;
 using EntityFramework.DAL.Data;
 using EntityFramework.DAL.Interfaces;
 using EntityFramework.DAL.Repositories;
+using IdentityServer4.AccessTokenValidation;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Serilog;
 using Serilog.Sinks.Elasticsearch;
 
@@ -21,6 +23,52 @@ var builder = WebApplication.CreateBuilder(args);
 ConfigureLogger();
 builder.Host.UseSerilog();
 builder.Services.AddControllers();
+builder.Services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+    .AddIdentityServerAuthentication(options =>
+    {
+        // base-address of your identityserver
+        options.Authority = "http://localhost:8020";;
+        // name of the API resource
+        options.ApiName = "EntityFrameworkAPI";
+        options.RequireHttpsMetadata = false;
+    });
+
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1",
+        new OpenApiInfo
+        {
+            Title = "EntityFrameworkAPI",
+            Version = "v1",
+        });
+    c.CustomSchemaIds(x => x.FullName);
+    var securitySchema = new OpenApiSecurityScheme()
+    {
+        Description = "JWT Auth Bearer Scheme",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        Reference = new OpenApiReference()
+        {
+            Type = ReferenceType.SecurityScheme,
+            Id = "Bearer",
+        }
+    };
+    
+    c.AddSecurityDefinition("Bearer", securitySchema);
+    var securityRequirement = new OpenApiSecurityRequirement
+    {
+        {
+            securitySchema, new[]
+            {
+                "Bearer"
+            }
+        }
+    };
+    c.AddSecurityRequirement(securityRequirement);
+}); 
+
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.InvalidModelStateResponseFactory = context =>
@@ -45,7 +93,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddCors(option =>
 {
     option.AddPolicy("CorsPolicy",
-        policy => { policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:4200"); });
+        policy => { policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:8020"); });
 });
 
 builder.Services.AddDbContext<DatabaseContext>(options =>
@@ -90,6 +138,8 @@ if (app.Environment.IsDevelopment())
 app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

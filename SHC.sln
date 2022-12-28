@@ -62,6 +62,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Aggregators", "Aggregators"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Appointment.Aggregator", "Appointment.Aggregator\Appointment.Aggregator.csproj", "{383B203E-21BB-4CE1-8AA1-D2333E0C4B93}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IdentityServer", "IdentityServer", "{83C979ED-ADB5-44B1-B190-144D2B6C53E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IdentityServer", "IdentityServer\IdentityServer.csproj", "{0C6D1D51-7007-42BC-A3DF-E375CFADC16C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -89,6 +93,7 @@ Global
 		{BDE28283-24A2-430C-A53F-AE8E42A9D922} = {D2F17CAB-F4B1-4073-88E9-48151C6E6351}
 		{CC81AB6E-53A1-4524-9CF1-EF8EAFAA9C1F} = {F22C94B6-FA26-4DEC-85DF-660AD81D45EB}
 		{383B203E-21BB-4CE1-8AA1-D2333E0C4B93} = {6AC2CE7C-C743-4C7D-BB98-FBEC0B6846E9}
+		{0C6D1D51-7007-42BC-A3DF-E375CFADC16C} = {83C979ED-ADB5-44B1-B190-144D2B6C53E9}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{5ADF05FF-19A4-47A5-B7F9-E8420F4FD04F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -175,5 +180,9 @@ Global
 		{383B203E-21BB-4CE1-8AA1-D2333E0C4B93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{383B203E-21BB-4CE1-8AA1-D2333E0C4B93}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{383B203E-21BB-4CE1-8AA1-D2333E0C4B93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C6D1D51-7007-42BC-A3DF-E375CFADC16C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C6D1D51-7007-42BC-A3DF-E375CFADC16C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C6D1D51-7007-42BC-A3DF-E375CFADC16C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C6D1D51-7007-42BC-A3DF-E375CFADC16C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
