@@ -6,18 +6,17 @@ name: EntityFrameworkApi
 on:
   push:
     branches: [ "master" ]
-    paths:
-    - 'EntityFramework.API/'
   pull_request:
     branches: [ "master" ]
-    paths:
-    - 'EntityFramework.API/'
     
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./EntityFramework.API
 
     steps:
     - uses: actions/checkout@v3
