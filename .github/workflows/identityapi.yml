@@ -6,18 +6,17 @@ name: IdentityApi
 on:
   push:
     branches: [ "master" ]
-    paths:
-    - 'Identity.API/'
   pull_request:
     branches: [ "master" ]
-    paths:
-    - 'Identity.API/'
     
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./Identity.API
 
     steps:
     - uses: actions/checkout@v3

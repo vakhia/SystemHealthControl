@@ -6,18 +6,17 @@ name: CleanArchitectureApi
 on:
   push:
     branches: [ "master" ]
-    paths:
-    - 'CA.API/'
   pull_request:
     branches: [ "master" ]
-    paths:
-    - 'CA.API/'
     
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
+     defaults:
+      run:
+        working-directory: ./CA.API
 
     steps:
     - uses: actions/checkout@v3

@@ -6,19 +6,18 @@ name: DapperApi
 on:
   push:
     branches: [ "master" ]
-    paths:
-    - 'Dapper.API/'
   pull_request:
     branches: [ "master" ]
-    paths:
-    - 'Dapper.API/'
     
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
-
+     defaults:
+      run:
+        working-directory: ./Dapper.API
+        
     steps:
     - uses: actions/checkout@v3
     - name: Setup .NET
