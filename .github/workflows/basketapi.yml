@@ -6,18 +6,17 @@ name: BasketApi
 on:
   push:
     branches: [ "master" ]
-    paths:
-    - 'Basket.API/'
   pull_request:
     branches: [ "master" ]
-    paths:
-    - 'Basket.API/'
     
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
+     defaults:
+      run:
+        working-directory: ./Basket.API
 
     steps:
     - uses: actions/checkout@v3
