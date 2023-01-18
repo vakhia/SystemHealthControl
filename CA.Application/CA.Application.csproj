@@ -6,4 +6,19 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+      <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Medicines\Commands" />
+      <Folder Include="Medicines\Queries" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\CA.Domain\CA.Domain.csproj" />
+      <ProjectReference Include="..\CA.Infrastructure\CA.Infrastructure.csproj" />
+    </ItemGroup>
+
 </Project>
