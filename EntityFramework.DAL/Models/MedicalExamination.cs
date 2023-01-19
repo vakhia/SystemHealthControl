@@ -6,7 +6,9 @@ public class MedicalExamination : BaseModel
 
     public string Description { get; set; }
 
-    public ICollection<Appointment> Appointments { get; set; }
-    
-    public ICollection<Treatment> Treatments { get; set; }
+    public ICollection<AppointmentMedicalExamination> Appointments { get; set; } =
+        new List<AppointmentMedicalExamination>();
+
+    public ICollection<MedicalExaminationTreatments> Treatments { get; set; } =
+        new List<MedicalExaminationTreatments>();
 }
