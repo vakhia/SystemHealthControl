@@ -8,7 +8,7 @@ public class TreatmentsWithMedicalExaminationsSpecification : BaseSpecification<
     public TreatmentsWithMedicalExaminationsSpecification(PaginationSpecificationParams specificationParams) : base(x
         => (string.IsNullOrEmpty(specificationParams.Search) || x.Title.ToLower().Contains(specificationParams.Search)))
     {
-        AddInclude(m => m.MedicalExaminations);
+        AddInclude(m => m.Examinations);
         AddOrderBy(x => x.StartDate);
         ApplyPaging(specificationParams.PageSize * (specificationParams.PageIndex - 1),
             specificationParams.PageSize);
@@ -32,6 +32,6 @@ public class TreatmentsWithMedicalExaminationsSpecification : BaseSpecification<
 
     public TreatmentsWithMedicalExaminationsSpecification(int id) : base(x => x.Id == id)
     {
-        AddInclude(x => x.MedicalExaminations);
+        AddInclude(x => x.Examinations);
     }
 }

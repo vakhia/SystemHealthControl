@@ -1,6 +1,6 @@
 namespace EntityFramework.DAL.Models;
 
-public class AppointmentMedicalExamination : BaseModel
+public class AppointmentMedicalExamination
 {
     public int AppointmentId { get; set; }
     

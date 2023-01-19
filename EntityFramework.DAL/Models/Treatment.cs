@@ -16,5 +16,5 @@ public class Treatment : BaseModel
     
     public int ClientId { get; set; }
 
-    public ICollection<MedicalExaminationTreatments> MedicalExaminations { get; set; } = new List<MedicalExaminationTreatments>();
+    public ICollection<MedicalExaminationTreatments> Examinations { get; set; } = new List<MedicalExaminationTreatments>();
 }

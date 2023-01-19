@@ -22,11 +22,32 @@ public class DatabaseContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        
+        modelBuilder.Entity<AppointmentMedicalExamination>(x => x.HasKey(amd => new { amd.AppointmentId, amd.MedicalExaminationId }));
 
         modelBuilder.Entity<AppointmentMedicalExamination>()
-            .HasKey(i => new { i.AppointmentId, i.MedicalExaminationId });
+            .HasOne(m => m.Appointment)
+            .WithMany(d => d.Examinations)
+            .HasForeignKey(md => md.AppointmentId);
+        
+        modelBuilder.Entity<AppointmentMedicalExamination>()
+            .HasOne(d => d.MedicalExamination)
+            .WithMany(m => m.Appointments)
+            .HasForeignKey(md => md.MedicalExaminationId);
+        
+        
+        modelBuilder.Entity<MedicalExaminationTreatments>(x => x.HasKey(met => new { met.MedicalExaminationId, met.TreatmentId }));
 
         modelBuilder.Entity<MedicalExaminationTreatments>()
-            .HasKey(i => new { i.MedicalExaminationId, i.TreatmentId });
+            .HasOne(m => m.MedicalExamination)
+            .WithMany(d => d.Treatments)
+            .HasForeignKey(md => md.MedicalExaminationId);
+        
+        modelBuilder.Entity<MedicalExaminationTreatments>()
+            .HasOne(d => d.Treatment)
+            .WithMany(m => m.Examinations)
+            .HasForeignKey(md => md.TreatmentId);
+
+        
     }
 }
