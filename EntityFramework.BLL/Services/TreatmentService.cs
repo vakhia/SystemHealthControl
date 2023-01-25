@@ -23,9 +23,20 @@ public class TreatmentService : ITreatmentService
     public async Task<CreateTreatmentRequest> CreateTreatmentAsync(CreateTreatmentRequest treatmentRequest)
     {
         var treatment = _mapper.Map<CreateTreatmentRequest, Treatment>(treatmentRequest);
-        treatment.MedicalExaminations = new List<MedicalExamination>();
+        if (treatmentRequest.MedicalExaminationsIds.Count > 0)
+        {
+            foreach (var id in treatmentRequest.MedicalExaminationsIds)
+            {
+                var medicalExamination = await _unitOfWork.Repository<MedicalExamination>().GetByIdAsync(id);
+                var medicalExaminationTreatments = new MedicalExaminationTreatments()
+                {
+                    MedicalExamination = medicalExamination,
+                    Treatment = treatment
+                };
+                treatment.Examinations.Add(medicalExaminationTreatments);
+            }
+        }
         _unitOfWork.Repository<Treatment>().Add(treatment);
-        //TODO Need to add creating many-to-many relationship with Medical Examinations
         var result = await _unitOfWork.Complete();
 
         if (result <= 0)
@@ -59,6 +70,7 @@ public class TreatmentService : ITreatmentService
     public async Task<UpdateTreatmentRequest> UpdateTreatmentAsync(UpdateTreatmentRequest treatmentRequest)
     {
         var treatment = _mapper.Map<UpdateTreatmentRequest, Treatment>(treatmentRequest);
+        //TODO Need to add updating many-to-many relationship
         _unitOfWork.Repository<Treatment>().Update(treatment);
         var result = await _unitOfWork.Complete();
 

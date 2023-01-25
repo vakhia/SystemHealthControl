@@ -25,19 +25,22 @@ public class MedicalExaminationService : IMedicalExaminationService
     {
         var medicalExamination =
             _mapper.Map<CreateMedicalExaminationRequest, MedicalExamination>(medicalExaminationRequest);
-        medicalExamination.Appointments = new List<Appointment>();
-        _unitOfWork.Repository<MedicalExamination>().Add(medicalExamination);
-        //TODO Need to add creating many-to-many relationship with Appointments
-        // foreach (var appointmentId in medicalExaminationRequest.AppointmentsIds)
-        // {
-        //     var appointmentMedicalExamination = new AppointmentMedicalExamination()
-        //     {
-        //         AppointmentId = appointmentId,
-        //         MedicalExaminationId = medicalExamination.Id,
-        //     };
-        //     _unitOfWork.Repository<AppointmentMedicalExamination>().Add(appointmentMedicalExamination);
-        // }
+        medicalExamination.Appointments = new List<AppointmentMedicalExamination>();
+        if (medicalExaminationRequest.AppointmentsIds.Count > 0)
+        {
+            foreach (var id in medicalExaminationRequest.AppointmentsIds)
+            {
+                var appointment = await _unitOfWork.Repository<Appointment>().GetByIdAsync(id);
+                var appointmentMedicalExamination = new AppointmentMedicalExamination()
+                {
+                    Appointment = appointment,
+                    MedicalExamination = medicalExamination
+                };
+                medicalExamination.Appointments.Add(appointmentMedicalExamination);
+            }
+        }
 
+        _unitOfWork.Repository<MedicalExamination>().Add(medicalExamination);
         var result = await _unitOfWork.Complete();
 
         if (result <= 0)
@@ -75,7 +78,10 @@ public class MedicalExaminationService : IMedicalExaminationService
         UpdateMedicalExaminationRequest medicalExaminationRequest)
     {
         var medicalExamination =
-            _mapper.Map<UpdateMedicalExaminationRequest, MedicalExamination>(medicalExaminationRequest);
+            await _unitOfWork.Repository<MedicalExamination>().GetByIdAsync(medicalExaminationRequest.Id);
+        //TODO Need to add updating many-to-many relationship
+        // var updatedMedicalExamination =
+        //     _mapper.Map<UpdateMedicalExaminationRequest, MedicalExamination>(medicalExaminationRequest);
         _unitOfWork.Repository<MedicalExamination>().Update(medicalExamination);
         var result = await _unitOfWork.Complete();
 

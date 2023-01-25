@@ -23,7 +23,7 @@ public class DatabaseContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
         
-        modelBuilder.Entity<AppointmentMedicalExamination>(x => x.HasKey(amd => new { amd.AppointmentId, amd.MedicalExaminationId }));
+        modelBuilder.Entity<AppointmentMedicalExamination>(x => x.HasKey(amd => new { amd.Id }));
 
         modelBuilder.Entity<AppointmentMedicalExamination>()
             .HasOne(m => m.Appointment)
@@ -36,7 +36,7 @@ public class DatabaseContext : DbContext
             .HasForeignKey(md => md.MedicalExaminationId);
         
         
-        modelBuilder.Entity<MedicalExaminationTreatments>(x => x.HasKey(met => new { met.MedicalExaminationId, met.TreatmentId }));
+        modelBuilder.Entity<MedicalExaminationTreatments>(x => x.HasKey(met => new { met.Id }));
 
         modelBuilder.Entity<MedicalExaminationTreatments>()
             .HasOne(m => m.MedicalExamination)

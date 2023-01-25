@@ -15,4 +15,5 @@ public class CreateTreatmentRequest
     public int DoctorId { get; set; }
     
     public int ClientId { get; set; }
+    public List<int> MedicalExaminationsIds { get; set; }
 }

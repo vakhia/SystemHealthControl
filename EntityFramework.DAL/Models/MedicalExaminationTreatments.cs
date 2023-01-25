@@ -1,6 +1,6 @@
 namespace EntityFramework.DAL.Models;
 
-public class MedicalExaminationTreatments
+public class MedicalExaminationTreatments : BaseModel
 {
     public int MedicalExaminationId;
     
