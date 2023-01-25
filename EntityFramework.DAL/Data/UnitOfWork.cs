@@ -45,4 +45,10 @@ public class UnitOfWork : IUnitOfWork
     {
         return await _databaseContext.SaveChangesAsync();
     }
+
+    public Task DetachEntities(List<int> ids)
+    {
+        _databaseContext.RemoveRange(ids);
+        return Task.CompletedTask;
+    }
 }

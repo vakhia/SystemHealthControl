@@ -7,4 +7,6 @@ public class UpdateMedicalExaminationRequest
     public string Title { get; set; }
 
     public string Description { get; set; }
+    
+    public IList<int> AppointmentsIds { get; set; }
 }

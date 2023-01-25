@@ -27,6 +27,9 @@ public class MappingProfiles : Profile
 
         CreateMap<MedicalExamination, CreateMedicalExaminationRequest>();
         CreateMap<CreateMedicalExaminationRequest, MedicalExamination>();
+        
+        CreateMap<MedicalExamination, UpdateMedicalExaminationRequest>();
+        CreateMap<UpdateMedicalExaminationRequest, MedicalExamination>();
 
         CreateMap<MedicalExamination, DeleteTreatmentRequest>();
         CreateMap<DeleteTreatmentRequest, MedicalExamination>();

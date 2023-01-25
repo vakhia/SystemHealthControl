@@ -16,5 +16,5 @@ public class Appointment : BaseModel
 
     public DateTime? EndDate { get; set; }
 
-    public ICollection<MedicalExamination> Examinations { get; set; }
+    public ICollection<AppointmentMedicalExamination> Examinations { get; set; }
 }
