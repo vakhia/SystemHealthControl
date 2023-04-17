@@ -46,28 +46,24 @@ public class SeedData
             );
 
             var serviceProvider = services.BuildServiceProvider();
-
             using var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();
             scope.ServiceProvider.GetService<PersistedGrantDbContext>().Database.Migrate();
-
-            var context = scope.ServiceProvider.GetService<ConfigurationDbContext>();
-            context.Database.Migrate();
-
-            EnsureSeedData(context);
-
-            var ctx = scope.ServiceProvider.GetService<IdentityServerDatabaseContext>();
-            ctx.Database.Migrate();
+            var dbContext = scope.ServiceProvider.GetService<ConfigurationDbContext>();
+            dbContext.Database.Migrate();
+            EnsureSeedData(dbContext);
+            var identityServerDatabaseContext = scope.ServiceProvider.GetService<IdentityServerDatabaseContext>();
+            identityServerDatabaseContext.Database.Migrate();
             EnsureUsers(scope);
         }
 
         private static void EnsureUsers(IServiceScope scope)
         {
-            var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+            var migration = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
 
-            var testUser = userMgr.FindByNameAsync("killerwhaleTest").Result;
-            if (testUser == null)
+            var user = migration.FindByNameAsync("killerwhaleTest").Result;
+            if (user == null)
             {
-                testUser = new User()
+                user = new User()
                 {
                     UserName = "killerwhaleTest",
                     SecondName = "killerwhale",
@@ -75,27 +71,18 @@ public class SeedData
                     Email = "killerwhaleTest++@gmail.com",
                     EmailConfirmed = true
                 };
-                var result = userMgr.CreateAsync(testUser, "Password@123").Result;
-                if (!result.Succeeded)
-                {
-                    throw new Exception(result.Errors.First().Description);
-                }
-
+                var result = migration.CreateAsync(user, "Password@123").Result;
                 result =
-                    userMgr.AddClaimsAsync(
-                        testUser,
+                    migration.AddClaimsAsync(
+                        user,
                         new Claim[]
                         {
                             new Claim("role", "user")
                         }
                     ).Result;
-                if (!result.Succeeded)
-                {
-                    throw new Exception(result.Errors.First().Description);
-                }
             }
 
-            var testAdmin = userMgr.FindByNameAsync("killerwhale-admin").Result;
+            var testAdmin = migration.FindByNameAsync("killerwhale-admin").Result;
             if (testAdmin == null)
             {
                 testAdmin = new User()
@@ -106,24 +93,16 @@ public class SeedData
                     Email = "killerwhale-admin@gmail.com",
                     EmailConfirmed = true
                 };
-                var result = userMgr.CreateAsync(testAdmin, "Password@123").Result;
-                if (!result.Succeeded)
-                {
-                    throw new Exception(result.Errors.First().Description);
-                }
+                var result = migration.CreateAsync(testAdmin, "Password@123").Result;
 
                 result =
-                    userMgr.AddClaimsAsync(
+                    migration.AddClaimsAsync(
                         testAdmin,
                         new Claim[]
                         {
                             new Claim("role", "admin")
                         }
                     ).Result;
-                if (!result.Succeeded)
-                {
-                    throw new Exception(result.Errors.First().Description);
-                }
             }
         }
 

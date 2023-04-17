@@ -25,9 +25,11 @@ public class AccountController : BaseApiController
 
     private readonly IDataValidatorService _dataValidatorService;
 
+    private readonly ILogger<AccountController> _logger;
+
     public AccountController(UserManager<User> userManager, SignInManager<User> signInManager,
         ITokenService tokenService, IMailService mailService, IAccountService accountService,
-        IDataValidatorService dataValidatorService)
+        IDataValidatorService dataValidatorService, ILogger<AccountController> logger)
     {
         _userManager = userManager;
         _signInManager = signInManager;
@@ -35,6 +37,7 @@ public class AccountController : BaseApiController
         _mailService = mailService;
         _accountService = accountService;
         _dataValidatorService = dataValidatorService;
+        _logger = logger;
     }
 
     [HttpPost("login")]
@@ -44,6 +47,7 @@ public class AccountController : BaseApiController
 
         if (user == null)
         {
+            _logger.LogError($"Cannot find user with this credentials");
             return Unauthorized(401);
         }
 
@@ -51,12 +55,14 @@ public class AccountController : BaseApiController
 
         if (!result.Succeeded)
         {
+            _logger.LogError($"Wrong credentials for user {user.UserName} - {user.Email}");
             return Unauthorized(401);
         }
 
         var accessToken = _tokenService.CreateToken(user);
         var refreshToken = await _tokenService.CreateRefreshToken(user.Id);
 
+        _logger.LogError($"User {user.UserName} - {user.Email} logged in");
         return new UserResponse()
         {
             Id = user.Id,
